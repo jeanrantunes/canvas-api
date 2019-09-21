@@ -7,8 +7,10 @@ export default class Validate {
       body: {
         name: Joi.string().required(),
         email: Joi.string().email().required(),
+        nickname: Joi.string(),
+        path_photo: Joi.string(),
         password: Joi.string().min(1).max(100).required(),
-        role_id: Joi.string().guid().required()
+        role: Joi.string().required()
       }
     })
   }
@@ -18,8 +20,10 @@ export default class Validate {
       body: {
         name: Joi.string().required(),
         email: Joi.string().email().required(),
-        password: Joi.string().min(1).max(100).optional(),
-        role_id: Joi.string().guid().required()
+        nickname: Joi.string(),
+        path_photo: Joi.string(),
+        password: Joi.string().min(1).max(100).required(),
+        role: Joi.string().required()
       }
     })
   }

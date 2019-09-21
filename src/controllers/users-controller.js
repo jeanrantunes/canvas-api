@@ -56,8 +56,10 @@ export default class Controller {
     const user = await new User({
       name: body.name,
       email: body.email,
+      nickname: body.nickname,
+      path_photo: body.path_photo,
       password: body.password,
-      role_id: body.role_id
+      role: body.role
     })
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
@@ -78,8 +80,10 @@ export default class Controller {
       .save({
         name: body.name,
         email: body.email,
+        nickname: body.nickname,
+        path_photo: body.path_photo,
         password: body.password,
-        role_id: body.role_id
+        role: body.role
       }, { method: 'update' })
       .catch(err => { throw new NotFound(err.toString()) })
 
