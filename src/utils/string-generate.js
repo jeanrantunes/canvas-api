@@ -15,3 +15,10 @@ export const emailGenerator = (lenght = 5) => {
 
   return `${string}@${domain}.com`
 }
+
+export const nameGenerator = (lenght = 5) => {
+  const string = stringGenerator(lenght)
+  const string2 = stringGenerator(lenght - 1)
+
+  return `${string} ${string2}`
+}

@@ -15,8 +15,9 @@ export default async () => {
   let user = await new User({
     name: stringGenerator(),
     email: emailGenerator(),
+    nickname: stringGenerator(),
     password: await hashPassword(password),
-    role_id: role.id
+    role: role.name
   }).save()
 
   const userWithRole = await new User({ id: user.attributes.id })

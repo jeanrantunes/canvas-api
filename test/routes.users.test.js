@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import app from '../src/config/server'
 import request from 'supertest'
-import { Database, emailGenerator } from '../src/utils'
+import { Database, emailGenerator, nameGenerator } from '../src/utils'
 import UserFactory from './factory/user-factory'
 import RoleFactory from './factory/role-factory'
 
@@ -30,8 +30,9 @@ describe('TEST USERS', () => {
         .send({
           name: 'User Test',
           email: emailGenerator(),
+          nickname: nameGenerator(4),
           password: 'test123',
-          role_id: role.id
+          role: role.name
         })
       expect(response.status).toEqual(200)
       expect(response.type).toEqual('application/json')
@@ -52,7 +53,7 @@ describe('TEST USERS', () => {
       expect(response.status).toEqual(200)
       expect(response.type).toEqual('application/json')
       expect(Object.keys(response.body)).toEqual(
-        expect.arrayContaining(['id', 'name', 'email', 'token', 'role'])
+        expect.arrayContaining(['id', 'name', 'email', 'token', 'role', 'nickname'])
       )
     })
   })
@@ -65,7 +66,7 @@ describe('TEST USERS', () => {
       expect(response.status).toEqual(200)
       expect(response.type).toEqual('application/json')
       expect(Object.keys(response.body[0])).toEqual(
-        expect.arrayContaining(['id', 'name', 'email', 'role'])
+        expect.arrayContaining(['id', 'name', 'email', 'role', 'nickname'])
       )
     })
   })
@@ -78,7 +79,7 @@ describe('TEST USERS', () => {
       expect(response.status).toEqual(200)
       expect(response.type).toEqual('application/json')
       expect(Object.keys(response.body)).toEqual(
-        expect.arrayContaining(['id', 'name', 'email', 'role'])
+        expect.arrayContaining(['id', 'name', 'email', 'role', 'nickname'])
       )
     })
   })
@@ -92,13 +93,14 @@ describe('TEST USERS', () => {
         .send({
           name: 'User Test Update',
           email: emailGenerator(),
+          nickname: nameGenerator(4),
           password: 'update123',
-          role_id: role.id
+          role: role.name
         })
       expect(response.status).toEqual(200)
       expect(response.type).toEqual('application/json')
       expect(Object.keys(response.body)).toEqual(
-        expect.arrayContaining(['id', 'name', 'email'])
+        expect.arrayContaining(['id', 'name', 'email', 'nickname'])
       )
     })
   })

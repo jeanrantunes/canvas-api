@@ -8,10 +8,11 @@ import {
 export default class Controller {
   async index (ctx) {
     const canvas = await new Canvas()
+      .where('user_id',  ctx.state.user.sub.id)
       .fetchAll()
       .catch(err => { throw new InternalServerError(err.toString()) })
      
-    ctx.body = canvas.models.filter(c => c.attributes.user_id === ctx.state.user.sub.id)
+    ctx.body = canvas
   }
 
   async show (ctx) {

@@ -8,10 +8,11 @@ import {
 export default class Controller {
   async index (ctx) {
     const postits = await new Postits()
+      .where('card_id', ctx.query.card)
       .fetchAll()
       .catch(err => { throw new InternalServerError(err.toString()) })
 
-      ctx.body = postits.models.filter(c => c.attributes.card_id === ctx.query.card)
+      ctx.body = postits
   }
 
   async show (ctx) {

@@ -8,10 +8,11 @@ import {
 export default class Controller {
   async index (ctx) {
     const cards = await new Cards()
+      .where('canvas_id', ctx.query.canvas)
       .fetchAll()
       .catch(err => { throw new InternalServerError(err.toString()) })
 
-    ctx.body = cards.models.filter(c => c.attributes.canvas_id === ctx.query.canvas)
+    ctx.body = cards
   }
 
   async show (ctx) {
