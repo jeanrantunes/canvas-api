@@ -8,7 +8,7 @@ export default class Validate {
         name: Joi.string().required(),
         email: Joi.string().email().required(),
         nickname: Joi.string(),
-        path_photo: Joi.string(),
+        avatar: Joi.any(),
         password: Joi.string().min(1).max(100).required(),
         role: Joi.string().required()
       }
@@ -21,7 +21,7 @@ export default class Validate {
         name: Joi.string().required(),
         email: Joi.string().email().required(),
         nickname: Joi.string(),
-        path_photo: Joi.string(),
+        atavar: Joi.any(),
         password: Joi.string().min(1).max(100).required(),
         role: Joi.string().required()
       }
