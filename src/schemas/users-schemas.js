@@ -10,10 +10,12 @@ export default class Validate {
         nickname: Joi.string(),
         avatar: Joi.any(),
         password: Joi.string().min(1).max(100).required(),
-        role: Joi.string().required()
+        role: Joi.string().required(),
+        resetPasswordToken: Joi.string(),
+        resetPasswordExpires: Joi.number()
       }
     })
-  }
+  }s
 
   update () {
     return validate({
@@ -23,7 +25,9 @@ export default class Validate {
         nickname: Joi.string(),
         atavar: Joi.any(),
         password: Joi.string().min(1).max(100).required(),
-        role: Joi.string().required()
+        role: Joi.string().required(),
+        resetPasswordToken: Joi.string(),
+        resetPasswordExpires: Joi.number()
       }
     })
   }

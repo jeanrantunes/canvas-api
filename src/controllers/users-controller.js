@@ -1,5 +1,6 @@
 import User from '../../database/models/User'
 import bcrypt from 'bcrypt'
+
 import {
   BadRequest,
   NotFound,
@@ -10,6 +11,7 @@ import {
   uploadFile,
   deleteFile,
   getUrl,
+  sendEmail,
 } from '../utils'
 
 export default class Controller {
@@ -51,7 +53,6 @@ export default class Controller {
     if (users && users.length) {
       users.map(user => {
         user.attributes.avatar = user.attributes.path_photo
-        // console.log(user)
         delete user.attributes.path_photo
       })
     } 
@@ -84,8 +85,6 @@ export default class Controller {
     body.password = await hashPassword(body.password)
 
     if (files && files.avatar) {
-      // console.log(files)
-      // console.log(avatar)
       photo = await uploadFile(files.avatar)
         .catch(err => { throw new InternalServerError(err.toString()) })
       urlPhoto = await getUrl(photo[0].metadata.name)
@@ -166,5 +165,32 @@ export default class Controller {
       .catch(err => { throw new BadRequest(err.toString()) })
 
     ctx.body = { id: ctx.params.id }
+  }
+
+  async generateKey (ctx) {
+    const { body } = ctx.request
+      const updatedUser = await new User()
+        .where({ email: body.email  })
+        .save({
+          resetPasswordToken: '12345',
+          resetPasswordExpires: Date.now() + 10000
+        }, { method: 'update' })
+        .catch(err => { throw new NotFound(err.toString()) })
+    
+    const email = sendEmail(body.email, '12345')
+      .catch(err => { throw new BadRequest(err.toString()) })
+    ctx.body = email
+  }
+
+  async userByToken (ctx) {
+    const user = await new User()
+      .where({
+        resetPasswordToken: ctx.query.token 
+      })
+      .where('resetPasswordExpires', '>', Date.now())
+      .fetch({ withRelated: ['role'], require: true })
+      .catch(err => { throw new NotFound(err.toString()) })
+
+    ctx.body = user
   }
 }

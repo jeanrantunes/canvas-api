@@ -44,6 +44,7 @@ app.use(jwt({
   path: [
     '/v1/users/login',
     '/v1/users/signup',
+    '/v1/users/password',
     '/v1/roles',
     '/public'
   ]

@@ -7,11 +7,13 @@ export const up = (knex, Promise) =>
     .createTable('users', (table) => {
       table.uuid('id').unique().primary().notNullable()
       table.string('name').notNullable()
-      table.string('nickname').notNullable()
+      table.string('nickname')
       table.string('email').unique().notNullable()
       table.text('password').notNullable()
       table.string('path_photo')
       table.string('role').references('name').inTable('roles')
+      table.string('resetPasswordToken')
+      table.bigInteger('resetPasswordExpires')
       table.timestamps()
     })
     .createTable('canvas', (table) => {

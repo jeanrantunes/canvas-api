@@ -13,6 +13,8 @@ export default bookshelf.Model.extend({
     delete attrs.password
     delete attrs.created_at
     delete attrs.updated_at
+    delete attrs.resetPasswordToken
+    delete attrs.resetPasswordExpires
 
     return attrs
   }
