@@ -172,14 +172,15 @@ export default class Controller {
       const updatedUser = await new User()
         .where({ email: body.email  })
         .save({
-          resetPasswordToken: '12345',
-          resetPasswordExpires: Date.now() + 10000
+          resetPasswordToken: await bcrypt.hash(Math.random().toString(36), 10),
+          resetPasswordExpires: Date.now() + 360000
         }, { method: 'update' })
         .catch(err => { throw new NotFound(err.toString()) })
     
-    const email = sendEmail(body.email, '12345')
+    const email = await sendEmail(body.email, '12345')
       .catch(err => { throw new BadRequest(err.toString()) })
-    ctx.body = email
+
+    ctx.body = { ...updatedUser.attributes, response: email.response }
   }
 
   async userByToken (ctx) {
