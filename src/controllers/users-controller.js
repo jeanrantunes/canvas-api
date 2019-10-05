@@ -122,7 +122,6 @@ export default class Controller {
     }
 
     const user = await new User({ id: ctx.params.id }).fetch()
-
     if (files && files.avatar) {
       if (user.attributes.path_photo) {
         /*delete the current photo*/
@@ -169,15 +168,16 @@ export default class Controller {
 
   async generateKey (ctx) {
     const { body } = ctx.request
-      const updatedUser = await new User()
-        .where({ email: body.email  })
-        .save({
-          resetPasswordToken: await bcrypt.hash(Math.random().toString(36), 10),
-          resetPasswordExpires: Date.now() + 360000
-        }, { method: 'update' })
-        .catch(err => { throw new NotFound(err.toString()) })
-    
-    const email = await sendEmail(body.email, '12345')
+    const token = await bcrypt.hash(Math.random().toString(36), 10)
+    const updatedUser = await new User()
+      .where({ email: body.email  })
+      .save({
+        resetPasswordToken: token,
+        resetPasswordExpires: Date.now() + 360000
+      }, { method: 'update' })
+      .catch(err => { throw new NotFound(err.toString()) })
+  
+    const email = await sendEmail(body.email, token)
       .catch(err => { throw new BadRequest(err.toString()) })
 
     ctx.body = { ...updatedUser.attributes, response: email.response }
@@ -192,6 +192,7 @@ export default class Controller {
       .fetch({ withRelated: ['role'], require: true })
       .catch(err => { throw new NotFound(err.toString()) })
 
+      user.attributes = generateJWT(user.toJSON())
     ctx.body = user
   }
 }

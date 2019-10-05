@@ -20,12 +20,12 @@ export default class Validate {
   update () {
     return validate({
       body: {
-        name: Joi.string().required(),
-        email: Joi.string().email().required(),
+        name: Joi.string(),
+        email: Joi.string().email(),
         nickname: Joi.string(),
         atavar: Joi.any(),
-        password: Joi.string().min(1).max(100).required(),
-        role: Joi.string().required(),
+        password: Joi.string().min(1).max(100),
+        role: Joi.string(),
         resetPasswordToken: Joi.string(),
         resetPasswordExpires: Joi.number()
       }
