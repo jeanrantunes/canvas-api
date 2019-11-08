@@ -12,6 +12,7 @@ import {
   deleteFile,
   getUrl,
   sendEmail,
+  welcomeEmail
 } from '../utils'
 
 export default class Controller {
@@ -109,6 +110,9 @@ export default class Controller {
 
     newUser.attributes.avatar = urlPhoto || null 
     delete newUser.attributes.path_photo
+
+    welcomeEmail(body.email)
+      .catch(err => { throw new BadRequest(err.toString()) })
 
     ctx.body = newUser
   }

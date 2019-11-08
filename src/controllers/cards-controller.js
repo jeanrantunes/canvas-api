@@ -1,4 +1,5 @@
 import Cards from '../../database/models/Cards'
+import Postits from '../../database/models/Postits'
 import {
   BadRequest,
   NotFound,
@@ -7,11 +8,17 @@ import {
 
 export default class Controller {
   async index (ctx) {
+    // console.log(ctx.query.canvas)
     const cards = await new Cards()
       .where('canvas_id', ctx.query.canvas)
       .fetchAll()
       .catch(err => { throw new InternalServerError(err.toString()) })
 
+      // let c = await new Cards()
+      // .fetchAll()
+      // .catch(err => { throw new InternalServerError(err.toString()) })
+
+      // console.log(c)
     ctx.body = cards
   }
 
@@ -56,6 +63,19 @@ export default class Controller {
   }
 
   async destroy (ctx) {
+
+    const postits = await new Postits()
+      .where('card_id', ctx.params.id)
+      .fetchAll()
+      .catch(err => { throw new InternalServerError(err.toString()) })
+
+    if (postits && postits.length > 0) {
+      await new Postits()
+        .where('card_id', ctx.params.id)
+        .destroy()
+        .catch(err => { throw new BadRequest(err.toString()) })
+    }
+
     await new Cards({ id: ctx.params.id })
       .destroy()
       .catch(err => { throw new BadRequest(err.toString()) })

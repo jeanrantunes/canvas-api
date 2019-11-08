@@ -23,7 +23,7 @@ export default class Validate {
         name: Joi.string(),
         email: Joi.string().email(),
         nickname: Joi.string(),
-        atavar: Joi.any(),
+        avatar: Joi.any(),
         password: Joi.string().min(1).max(100),
         role: Joi.string(),
         resetPasswordToken: Joi.string(),
