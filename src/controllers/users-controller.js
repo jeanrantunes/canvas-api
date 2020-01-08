@@ -133,7 +133,7 @@ export default class Controller {
           .catch(err => { throw new InternalServerError(err.toString()) })
       }
       photo = await uploadFile(files.avatar)
-        .catch(err => { throw new InternalServerError(err.toString()) })
+        .catch(err => { throw new InternalServerError(err.toString())})
       urlPhoto = await getUrl(photo[0].metadata.name)
         .catch(err => { throw new InternalServerError(err.toString()) })
     } 

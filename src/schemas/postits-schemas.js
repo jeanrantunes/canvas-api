@@ -8,7 +8,7 @@ export default class Validate {
         title: Joi.string().required(),
         color: Joi.string().required(),
         order: Joi.number().integer().required(),
-        card_id: Joi.string().guid().required()
+        cardId: Joi.string().guid().required()
       }
     })
   }
@@ -19,7 +19,7 @@ export default class Validate {
         title: Joi.string().required(),
         color: Joi.string().required(),
         order: Joi.number().integer().required(),
-        card_id: Joi.string().guid().required()
+        cardId: Joi.string().guid().required()
       }
     })
   }

@@ -39,7 +39,7 @@ describe('TEST ROLES', () => {
             expect(response.status).toEqual(200)
             expect(response.type).toEqual('application/json')
             expect(Object.keys(response.body)).toEqual(
-                expect.arrayContaining(['id', 'title', 'description', 'user_id', 'created_at', 'updated_at'])
+                expect.arrayContaining(['id', 'title', 'description', 'userId', 'created_at', 'updated_at'])
             )
         })
     })
@@ -53,7 +53,7 @@ describe('TEST ROLES', () => {
             expect(response.status).toEqual(200)
             expect(response.type).toEqual('application/json')
             expect(Object.keys(response.body[0])).toEqual(
-                expect.arrayContaining(['id', 'title', 'description', 'user_id', 'created_at', 'updated_at'])
+                expect.arrayContaining(['id', 'title', 'description', 'userId', 'created_at', 'updated_at'])
             )
         })
     })
@@ -66,7 +66,7 @@ describe('TEST ROLES', () => {
             expect(response.status).toEqual(200)
             expect(response.type).toEqual('application/json')
             expect(Object.keys(response.body)).toEqual(
-                expect.arrayContaining(['id', 'title', 'description', 'user_id', 'created_at', 'updated_at'])
+                expect.arrayContaining(['id', 'title', 'description', 'userId', 'created_at', 'updated_at'])
             )
         })
     })
@@ -83,7 +83,7 @@ describe('TEST ROLES', () => {
             expect(response.status).toEqual(200)
             expect(response.type).toEqual('application/json')
             expect(Object.keys(response.body)).toEqual(
-                expect.arrayContaining(['id', 'title', 'description', 'user_id', 'updated_at'])
+                expect.arrayContaining(['id', 'title', 'description', 'userId', 'updated_at'])
             )
         })
     })

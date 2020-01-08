@@ -38,13 +38,13 @@ describe('TEST ROLES', () => {
                     title: 'TestCanvas',
                     color: '#444',
                     order: 1,
-                    canvas_id: canvas.id,
+                    canvasId: canvas.id,
                 })
                 .set('Authorization', user.token)
             expect(response.status).toEqual(200)
             expect(response.type).toEqual('application/json')
             expect(Object.keys(response.body)).toEqual(
-                expect.arrayContaining(['id', 'title', 'color', 'order', 'canvas_id'])
+                expect.arrayContaining(['id', 'title', 'color', 'order', 'canvasId'])
             )
         })
     })
@@ -58,7 +58,7 @@ describe('TEST ROLES', () => {
             expect(response.status).toEqual(200)
             expect(response.type).toEqual('application/json')
             expect(Object.keys(response.body[0])).toEqual(
-                expect.arrayContaining(['id', 'title', 'color', 'order', 'canvas_id'])
+                expect.arrayContaining(['id', 'title', 'color', 'order', 'canvasId'])
             )
         })
     })
@@ -71,7 +71,7 @@ describe('TEST ROLES', () => {
             expect(response.status).toEqual(200)
             expect(response.type).toEqual('application/json')
             expect(Object.keys(response.body)).toEqual(
-                expect.arrayContaining(['id', 'title', 'color', 'order', 'canvas_id'])
+                expect.arrayContaining(['id', 'title', 'color', 'order', 'canvasId'])
             )
         })
     })
@@ -85,12 +85,12 @@ describe('TEST ROLES', () => {
                     title: 'updated ss',
                     color: '#244',
                     order: 1,
-                    canvas_id: canvas.id,
+                    canvasId: canvas.id,
                 })
             expect(response.status).toEqual(200)
             expect(response.type).toEqual('application/json')
             expect(Object.keys(response.body)).toEqual(
-                expect.arrayContaining(['id', 'title', 'color', 'order', 'canvas_id'])
+                expect.arrayContaining(['id', 'title', 'color', 'order', 'canvasId'])
             )
         })
     })

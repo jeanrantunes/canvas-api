@@ -13,5 +13,6 @@ router.post('/postits', valid.create(), ctrl.create)
 router.get('/postits/:id', ctrl.show)
 router.put('/postits/:id', valid.update(), ctrl.update)
 router.delete('/postits/:id', ctrl.destroy)
+router.post('/postits/order', ctrl.order)
 
 export default router.routes()

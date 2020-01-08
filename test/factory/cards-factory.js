@@ -11,7 +11,7 @@ export default async () => {
     title: stringGenerator(),
     color: '#323',
     order: 1,
-    canvas_id: canvas.id,
+    canvasId: canvas.id,
   }).save()
 
   return cards

@@ -11,7 +11,7 @@ import {
 export default class Controller {
   async index (ctx) {
     let canvas = await new Canvas()
-      .where('user_id',  ctx.state.user.sub.id)
+      .where('userId',  ctx.state.user.sub.id)
       .fetchAll()
       .catch(err => { throw new InternalServerError(err.toString()) })
 
@@ -24,14 +24,34 @@ export default class Controller {
       .catch(err => { throw new NotFound(err.toString()) })
     
     const cards = await new Cards()
-      .where('canvas_id', canvas.attributes.id)
+      .where('canvasId', canvas.attributes.id)
       .fetchAll()
       .catch(err => { throw new InternalServerError(err.toString()) })
 
-      ctx.body = {
-        ...canvas.attributes,
-        cards: cards
-      }
+    let p
+    if (cards && cards.length > 0) {
+      p = cards.map(async c => {
+        try {
+          const postits = await new Postits()
+            .where('cardId', c.attributes.id)
+            .orderBy('order', 'asc')
+            .fetchAll()
+            .catch(err => { throw new InternalServerError(err.toString()) })
+
+          c.attributes.postits = postits
+          return c
+        } catch (err) {
+          return c
+        }
+      })
+    }
+
+    const c = await Promise.all(p)
+    
+    ctx.body = {
+      ...canvas.attributes,
+      cards: c,
+    }
   }
 
   async create (ctx) {
@@ -40,17 +60,15 @@ export default class Controller {
     const canvas = await new Canvas({
       title: body.title,
       description: body.description,
-      user_id: ctx.state.user.sub.id
+      userId: ctx.state.user.sub.id
     })
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
-
     
     cards.push(await new Cards({
       title: 'Justification',
-      color: '#ddd',
-      order: 1,
-      canvas_id: canvas.attributes.id
+      order: 0,
+      canvasId: canvas.attributes.id
     })
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
@@ -58,9 +76,8 @@ export default class Controller {
     
     cards.push(await new Cards({
       title: 'Product',
-      color: '#444',
-      order: 2,
-      canvas_id: canvas.attributes.id
+      order: 1,
+      canvasId: canvas.attributes.id
     })
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
@@ -68,9 +85,8 @@ export default class Controller {
 
     cards.push(await new Cards({
       title: 'Stakeholders',
-      color: '#444',
-      order: 3,
-      canvas_id: canvas.attributes.id
+      order: 2,
+      canvasId: canvas.attributes.id
     })
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
@@ -78,18 +94,16 @@ export default class Controller {
 
     cards.push(await new Cards({
       title: 'Assumptions',
-      color: '#444',
-      order: 4,
-      canvas_id: canvas.attributes.id
+      order: 3,
+      canvasId: canvas.attributes.id
     })
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
     )
     cards.push(await new Cards({
       title: 'Scratchs',
-      color: '#444',
-      order: 5,
-      canvas_id: canvas.attributes.id
+      order: 4,
+      canvasId: canvas.attributes.id
     })
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
@@ -97,9 +111,8 @@ export default class Controller {
 
     cards.push(await new Cards({
       title: 'Smart Goals',
-      color: '#444',
-      order: 6,
-      canvas_id: canvas.attributes.id
+      order: 5,
+      canvasId: canvas.attributes.id
     })
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
@@ -107,9 +120,8 @@ export default class Controller {
 
     cards.push(await new Cards({
       title: 'Requirements',
-      color: '#444',
-      order: 7,
-      canvas_id: canvas.attributes.id
+      order: 6,
+      canvasId: canvas.attributes.id
     })
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
@@ -117,9 +129,8 @@ export default class Controller {
 
     cards.push(await new Cards({
       title: 'Team',
-      color: '#444',
-      order: 8,
-      canvas_id: canvas.attributes.id
+      order: 7,
+      canvasId: canvas.attributes.id
     })
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
@@ -127,9 +138,8 @@ export default class Controller {
 
     cards.push(await new Cards({
       title: 'Delivery Goals',
-      color: '#444',
-      order: 9,
-      canvas_id: canvas.attributes.id
+      order: 8,
+      canvasId: canvas.attributes.id
     })
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
@@ -137,9 +147,8 @@ export default class Controller {
 
     cards.push(await new Cards({
       title: 'Costs',
-      color: '#444',
-      order: 10,
-      canvas_id: canvas.attributes.id
+      order: 9,
+      canvasId: canvas.attributes.id
     })
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
@@ -147,9 +156,8 @@ export default class Controller {
 
     cards.push(await new Cards({
       title: 'Benefits',
-      color: '#444',
-      order: 11,
-      canvas_id: canvas.attributes.id
+      order: 10,
+      canvasId: canvas.attributes.id
     })
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
@@ -157,9 +165,8 @@ export default class Controller {
 
     cards.push(await new Cards({
       title: 'Restrictions',
-      color: '#444',
-      order: 12,
-      canvas_id: canvas.attributes.id
+      order: 11,
+      canvasId: canvas.attributes.id
     })
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
@@ -178,7 +185,7 @@ export default class Controller {
       .save({
         title: body.title,
         description: body.description,
-        user_id: ctx.state.user.sub.id
+        userId: ctx.state.user.sub.id
       }, { method: 'update' })
       .catch(err => { throw new NotFound(err.toString()) })
 
@@ -187,19 +194,19 @@ export default class Controller {
 
   async destroy (ctx) {
     const cards = await new Cards()
-      .where('canvas_id', ctx.params.id)
+      .where('canvasId', ctx.params.id)
       .fetchAll()
       .catch(err => { throw new InternalServerError(err.toString()) })
 
     if (cards && cards.length > 0) {
       cards.forEach(async c => {
         await new Postits()
-          .where('card_id', c.attributes.id)
+          .where('cardId', c.attributes.id)
           .destroy()
           .catch(err => { throw new BadRequest(err.toString()) })
       })
       await new Cards()
-      .where('canvas_id', ctx.params.id)
+      .where('canvasId', ctx.params.id)
       .destroy()
       .catch(err => { throw new BadRequest(err.toString()) })
 

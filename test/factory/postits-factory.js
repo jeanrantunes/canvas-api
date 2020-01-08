@@ -11,7 +11,7 @@ export default async () => {
     title: stringGenerator(),
     color: '#323',
     order: 1,
-    card_id: card.id,
+    cardId: card.id,
   }).save()
 
   return postits

@@ -6,9 +6,8 @@ export default class Validate {
     return validate({
       body: {
         title: Joi.string().required(),
-        color: Joi.string().required(),
         order: Joi.number().integer().required(),
-        canvas_id: Joi.string().guid().required()
+        canvasId: Joi.string().guid().required()
       }
     })
   }
@@ -17,9 +16,7 @@ export default class Validate {
     return validate({
       body: {
         title: Joi.string().required(),
-        color: Joi.string().required(),
         order: Joi.number().integer().required(),
-        canvas_id: Joi.string().guid().required()
       }
     })
   }

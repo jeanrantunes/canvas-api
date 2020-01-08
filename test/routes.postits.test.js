@@ -38,13 +38,13 @@ describe('TEST ROLES', () => {
                     title: 'TestCanvas',
                     color: '#444',
                     order: 1,
-                    card_id: card.id,
+                    cardId: card.id,
                 })
                 .set('Authorization', user.token)
             expect(response.status).toEqual(200)
             expect(response.type).toEqual('application/json')
             expect(Object.keys(response.body)).toEqual(
-                expect.arrayContaining(['id', 'title', 'color', 'order', 'card_id'])
+                expect.arrayContaining(['id', 'title', 'color', 'order', 'cardId'])
             )
         })
     })
@@ -58,7 +58,7 @@ describe('TEST ROLES', () => {
             expect(response.status).toEqual(200)
             expect(response.type).toEqual('application/json')
             expect(Object.keys(response.body[0])).toEqual(
-                expect.arrayContaining(['id', 'title', 'color', 'order', 'card_id'])
+                expect.arrayContaining(['id', 'title', 'color', 'order', 'cardId'])
             )
         })
     })
@@ -71,7 +71,7 @@ describe('TEST ROLES', () => {
             expect(response.status).toEqual(200)
             expect(response.type).toEqual('application/json')
             expect(Object.keys(response.body)).toEqual(
-                expect.arrayContaining(['id', 'title', 'color', 'order', 'card_id'])
+                expect.arrayContaining(['id', 'title', 'color', 'order', 'cardId'])
             )
         })
     })
@@ -85,12 +85,12 @@ describe('TEST ROLES', () => {
                     title: 'updated ss',
                     color: '#244',
                     order: 1,
-                    card_id: card.id,
+                    cardId: card.id,
                 })
             expect(response.status).toEqual(200)
             expect(response.type).toEqual('application/json')
             expect(Object.keys(response.body)).toEqual(
-                expect.arrayContaining(['id', 'title', 'color', 'order', 'card_id'])
+                expect.arrayContaining(['id', 'title', 'color', 'order', 'cardId'])
             )
         })
     })

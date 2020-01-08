@@ -10,7 +10,7 @@ export default async () => {
   let canvas = await new Canvas({
     title: stringGenerator(),
     description: stringGenerator(),
-    user_id: user.id,
+    userId: user.id,
   }).save()
 
   return canvas

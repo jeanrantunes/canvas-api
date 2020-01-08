@@ -1,5 +1,6 @@
 import Cards from '../../database/models/Cards'
 import Postits from '../../database/models/Postits'
+import Canvas from '../../database/models/Canvas'
 import {
   BadRequest,
   NotFound,
@@ -8,17 +9,11 @@ import {
 
 export default class Controller {
   async index (ctx) {
-    // console.log(ctx.query.canvas)
     const cards = await new Cards()
-      .where('canvas_id', ctx.query.canvas)
+      .where('canvasId', ctx.query.canvas)
       .fetchAll()
       .catch(err => { throw new InternalServerError(err.toString()) })
 
-      // let c = await new Cards()
-      // .fetchAll()
-      // .catch(err => { throw new InternalServerError(err.toString()) })
-
-      // console.log(c)
     ctx.body = cards
   }
 
@@ -35,12 +30,13 @@ export default class Controller {
 
     const cards = await new Cards({
       title: body.title,
-      color: body.color,
       order: body.order,
-      canvas_id: body.canvas_id
+      canvasId: body.canvasId
     })
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
+
+    updateTimestamp(cards.attributes.id)
 
     ctx.body = await new Cards({ id: cards.attributes.id })
       .fetch()
@@ -53,25 +49,25 @@ export default class Controller {
     const cards = await new Cards({ id: ctx.params.id })
       .save({
         title: body.title,
-        color: body.color,
         order: body.order,
-        canvas_id: body.canvas_id
       }, { method: 'update' })
       .catch(err => { throw new NotFound(err.toString()) })
 
+    updateTimestamp(cards.attributes.id)
+      
     ctx.body = cards
   }
 
   async destroy (ctx) {
 
     const postits = await new Postits()
-      .where('card_id', ctx.params.id)
+      .where('cardId', ctx.params.id)
       .fetchAll()
       .catch(err => { throw new InternalServerError(err.toString()) })
 
     if (postits && postits.length > 0) {
       await new Postits()
-        .where('card_id', ctx.params.id)
+        .where('cardId', ctx.params.id)
         .destroy()
         .catch(err => { throw new BadRequest(err.toString()) })
     }
@@ -82,4 +78,32 @@ export default class Controller {
 
     ctx.body = { id: ctx.params.id }
   }
+}
+
+const updateTimestamp = async (cardId) => {
+  if (!cardId) {
+    return
+  }
+
+  const now = new Date()
+
+  const card = await new Cards({ id: cardId })
+    .fetch()
+    .catch(err => { throw new InternalServerError(err.toString()) })
+
+  if (!card) {
+    return
+  }
+
+  const canvasId = card.attributes.canvasId
+  
+  if (!canvasId) {
+    return
+  }
+  
+  await new Canvas({ id: canvasId })
+    .save({
+      updated_at: now
+    })
+    .catch(err => { throw new InternalServerError(err.toString()) })
 }

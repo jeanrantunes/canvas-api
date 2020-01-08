@@ -6,7 +6,7 @@ export default class Validate {
     return validate({
       body: {
         title: Joi.string().required(),
-        description: Joi.string(),
+        description: Joi.string().allow(null),
       }
     })
   }
@@ -15,7 +15,7 @@ export default class Validate {
     return validate({
       body: {
         title: Joi.string().required(),
-        description: Joi.string(),
+        description: Joi.string().allow(null),
       }
     })
   }
