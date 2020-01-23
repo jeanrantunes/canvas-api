@@ -5,7 +5,7 @@ export default class Validate {
   create () {
     return validate({
       body: {
-        title: Joi.string().required(),
+        title: Joi.string().max(1000).required(),
         color: Joi.string().required(),
         order: Joi.number().integer().required(),
         cardId: Joi.string().guid().required()
@@ -16,7 +16,7 @@ export default class Validate {
   update () {
     return validate({
       body: {
-        title: Joi.string().required(),
+        title: Joi.string().max(1000).required(),
         color: Joi.string().required(),
         order: Joi.number().integer().required(),
         cardId: Joi.string().guid().required()

@@ -1,7 +1,7 @@
 {
-  "name": "api-boilerplate",
+  "name": "api-canvas",
   "version": "1.0.0",
-  "description": "Node API Boilerplate by Nave",
+  "description": "Node API Canvas Headfish",
   "main": "api/index.js",
   "repository": {
     "type": "git",

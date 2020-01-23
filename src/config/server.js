@@ -42,9 +42,11 @@ app.use(jwt({
   jwtMiddleware
 }).unless({
   path: [
+    '/v1/users/signup-confirm',
+    '/v1/users/signup-confirmed',
     '/v1/users/login',
     '/v1/users/signup',
-    '/v1/users/password',
+    '/v1/users/password', 
     '/v1/roles',
     '/public'
   ]

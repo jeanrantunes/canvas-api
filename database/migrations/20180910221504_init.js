@@ -14,6 +14,8 @@ export const up = (knex, Promise) =>
       table.string('role').references('name').inTable('roles')
       table.string('resetPasswordToken')
       table.bigInteger('resetPasswordExpires')
+      table.string('signupToken')
+      table.boolean('hasBeenConfirmed').notNullable().defaultTo(false)
       table.timestamps()
     })
     .createTable('canvas', (table) => {
@@ -34,7 +36,7 @@ export const up = (knex, Promise) =>
     })
     .createTable('postits', (table) => {
       table.uuid('id').unique().primary().notNullable()
-      table.string('title').notNullable()
+      table.string('title', 1000).notNullable()
       table.string('color').notNullable()
       table.integer('order').notNullable()
       table.uuid('cardId')

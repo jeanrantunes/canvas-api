@@ -11,6 +11,7 @@ export const seed = async (knex, Promise) => {
             email: 'jeanrantunes93@gmail.com', 
             password: '12345', 
             role: 'admin',
+            hasBeenConfirmed: true,
             created_at: new Date(),
             updated_at: new Date(),
         },
