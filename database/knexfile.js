@@ -16,7 +16,7 @@ export const staging = {
     database: 'dc56bsh7gias6v',
     user: 'jylqqufmffzdku',
     password: 'cc65832b5f83f69e583d3bac09c83a3642d56ded35eb09bfe2f15ce8d0e3fda8',
-    ssl: true
+    ssl: true,
   },
   migrations: {
     directory: path.resolve(__dirname, 'migrations')
