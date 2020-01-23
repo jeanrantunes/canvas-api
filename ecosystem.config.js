@@ -6,7 +6,7 @@ module.exports = {
     autorestart: true,
     watch: true,
     env: {
-      NODE_ENV: 'development'
+      NODE_ENV: 'staging'
     },
     env_production: {
       NODE_ENV: 'production'

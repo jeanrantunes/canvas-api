@@ -5,7 +5,6 @@ import Bookshelf from 'bookshelf'
 import BookshelfUuid from 'bookshelf-uuid'
 
 const environment = NODE_ENV || 'development'
-
 const knex = Knex(config[environment])
 const bookshelf = Bookshelf(knex)
 
