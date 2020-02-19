@@ -17,7 +17,7 @@ import {
 } from '../utils'
 
 export default class Controller {
-  async login (ctx) {
+  async login(ctx) {
     const { body } = ctx.request
 
     const user = await new User({ email: body.email })
@@ -53,7 +53,7 @@ export default class Controller {
     ctx.body = user
   }
 
-  async index (ctx) {
+  async index(ctx) {
     let users = await new User()
       .fetchAll({ withRelated: ['role'] })
       .catch(err => { throw new InternalServerError(err.toString()) })
@@ -63,11 +63,11 @@ export default class Controller {
         user.attributes.avatar = user.attributes.path_photo
         delete user.attributes.path_photo
       })
-    } 
+    }
     ctx.body = users
   }
 
-  async show (ctx) {
+  async show(ctx) {
     const user = await new User({ id: ctx.params.id })
       .fetch({ withRelated: ['role'], require: true })
       .catch(err => { throw new NotFound(err.toString()) })
@@ -75,7 +75,7 @@ export default class Controller {
     const path = user.attributes.path_photo
 
     user.attributes.avatar = null
-    
+
     if (path) {
       user.attributes.avatar = await getUrl(path)
         .catch(err => { throw new InternalServerError(err.toString()) })
@@ -86,7 +86,7 @@ export default class Controller {
     ctx.body = user
   }
 
-  async create (ctx) {
+  async create(ctx) {
     const { body, files } = ctx.request
     let photo, urlPhoto
 
@@ -119,9 +119,8 @@ export default class Controller {
       .fetch({ withRelated: ['role'] })
       .catch(err => { throw new InternalServerError(err.toString()) })
 
-    newUser.attributes.avatar = urlPhoto || null 
+    newUser.attributes.avatar = urlPhoto || null
     delete newUser.attributes.path_photo
-
     welcomeEmail(body.email, token)
       .catch(err => { throw new BadRequest(err.toString()) })
 
@@ -129,7 +128,7 @@ export default class Controller {
     ctx.body = newUser
   }
 
-  async update (ctx) {
+  async update(ctx) {
     const { body, files } = ctx.request
     let photo, urlPhoto
 
@@ -145,10 +144,10 @@ export default class Controller {
           .catch(err => { throw new InternalServerError(err.toString()) })
       }
       photo = await uploadFile(files.avatar)
-        .catch(err => { throw new InternalServerError(err.toString())})
+        .catch(err => { throw new InternalServerError(err.toString()) })
       urlPhoto = await getUrl(photo[0].metadata.name)
         .catch(err => { throw new InternalServerError(err.toString()) })
-    } 
+    }
 
     const updatedUser = await new User({ id: ctx.params.id })
       .save({
@@ -160,16 +159,16 @@ export default class Controller {
         path_photo: photo ? photo[0].metadata.name : user.attributes.path_photo,
       }, { method: 'update' })
       .catch(err => { throw new NotFound(err.toString()) })
-    
+
     updatedUser.attributes.avatar = urlPhoto || user.attributes.path_photo
     delete updatedUser.attributes.path_photo
 
     ctx.body = updatedUser
   }
 
-  async destroy (ctx) {
+  async destroy(ctx) {
     const user = await new User({ id: ctx.params.id })
-    
+
     if (user.attributes.path_photo) {
       deleteFile(user.attributes.path_photo)
         .catch(err => { throw new InternalServerError(err.toString()) })
@@ -182,51 +181,51 @@ export default class Controller {
     ctx.body = { id: ctx.params.id }
   }
 
-  async generateKey (ctx) {
+  async generateKey(ctx) {
     const { body } = ctx.request
     const token = await bcrypt.hash(Math.random().toString(36), 10)
     const updatedUser = await new User()
-      .where({ email: body.email  })
+      .where({ email: body.email })
       .save({
         resetPasswordToken: token,
         resetPasswordExpires: Date.now() + 360000
       }, { method: 'update' })
       .catch(err => { throw new NotFound(err.toString()) })
-  
+
     const email = await sendEmail(body.email, token)
       .catch(err => { throw new BadRequest(err.toString()) })
 
     ctx.body = { ...updatedUser.attributes, response: email.response }
   }
 
-  async userByToken (ctx) {
+  async userByToken(ctx) {
     const user = await new User()
       .where({
-        resetPasswordToken: ctx.query.token 
+        resetPasswordToken: ctx.query.token
       })
       .where('resetPasswordExpires', '>', Date.now())
       .fetch({ withRelated: ['role'], require: true })
       .catch(err => { throw new NotFound(err.toString()) })
 
-      user.attributes = generateJWT(user.toJSON())
+    user.attributes = generateJWT(user.toJSON())
     ctx.body = user
   }
 
-  async signupConfirmed (ctx) {
+  async signupConfirmed(ctx) {
     const { body } = ctx.request
     const { token } = body
 
     const user = await new User()
-      .where({ signupToken: token  })
+      .where({ signupToken: token })
       .save({
         hasBeenConfirmed: true
       }, { method: 'update' })
       .catch(err => { throw new NotFound(err.toString()) })
-     
-      ctx.body = user
+
+    ctx.body = user
   }
 
-  async signupConfirmSendEmail (ctx) {
+  async signupConfirmSendEmail(ctx) {
     const user = await new User({ id: ctx.params.id })
       .fetch({ withRelated: ['role'], require: true })
       .catch(err => { throw new NotFound(err.toString()) })
@@ -238,15 +237,15 @@ export default class Controller {
 
     welcomeEmail(user.attributes.email, user.attributes.signupToken)
       .catch(err => { throw new BadRequest(err.toString()) })
-    
+
     ctx.body = { id: ctx.params.id }
   }
 
-  async feedback (ctx) {
+  async feedback(ctx) {
     const { body } = ctx.request
     const { msg } = body
 
-    const user = await new User({ id: ctx.state.user.sub.id  })
+    const user = await new User({ id: ctx.state.user.sub.id })
       .fetch({ withRelated: ['role'], require: true })
       .catch(err => { throw new NotFound(err.toString()) })
 

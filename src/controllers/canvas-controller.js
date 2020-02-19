@@ -9,20 +9,20 @@ import {
 } from '../utils'
 
 export default class Controller {
-  async index (ctx) {
+  async index(ctx) {
     let canvas = await new Canvas()
-      .where('userId',  ctx.state.user.sub.id)
+      .where('userId', ctx.state.user.sub.id)
       .fetchAll()
       .catch(err => { throw new InternalServerError(err.toString()) })
 
     ctx.body = canvas
   }
 
-  async show (ctx) {
+  async show(ctx) {
     const canvas = await new Canvas({ id: ctx.params.id })
       .fetch()
       .catch(err => { throw new NotFound(err.toString()) })
-    
+
     const cards = await new Cards()
       .where('canvasId', canvas.attributes.id)
       .fetchAll()
@@ -47,14 +47,14 @@ export default class Controller {
     }
 
     const c = await Promise.all(p)
-    
+
     ctx.body = {
       ...canvas.attributes,
       cards: c,
     }
   }
 
-  async create (ctx) {
+  async create(ctx) {
     const { body } = ctx.request
     let cards = []
     const canvas = await new Canvas({
@@ -64,7 +64,7 @@ export default class Controller {
     })
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
-    
+
     cards.push(await new Cards({
       title: 'Justification',
       order: 0,
@@ -73,7 +73,7 @@ export default class Controller {
       .save()
       .catch(err => { throw new BadRequest(err.toString()) })
     )
-    
+
     cards.push(await new Cards({
       title: 'Product',
       order: 1,
@@ -178,7 +178,7 @@ export default class Controller {
     }
   }
 
-  async update (ctx) {
+  async update(ctx) {
     const { body } = ctx.request
 
     const canvas = await new Canvas({ id: ctx.params.id })
@@ -192,7 +192,7 @@ export default class Controller {
     ctx.body = canvas
   }
 
-  async destroy (ctx) {
+  async destroy(ctx) {
     const cards = await new Cards()
       .where('canvasId', ctx.params.id)
       .fetchAll()
@@ -206,12 +206,12 @@ export default class Controller {
           .catch(err => { throw new BadRequest(err.toString()) })
       })
       await new Cards()
-      .where('canvasId', ctx.params.id)
-      .destroy()
-      .catch(err => { throw new BadRequest(err.toString()) })
+        .where('canvasId', ctx.params.id)
+        .destroy()
+        .catch(err => { throw new BadRequest(err.toString()) })
 
     }
-  
+
     await new Canvas({ id: ctx.params.id })
       .destroy()
       .catch(err => { throw new BadRequest(err.toString()) })
